@@ -1,2 +1,5 @@
 .DS_Store
 venv/
+images/
+ids.pickle
+trainer.yml
