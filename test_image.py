@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 
 face_cascade = cv2.CascadeClassifier('cascades/frontface.xml')
-img = cv2.imread('images/test.JPG') # path to my test image
+img = cv2.imread('images/Kanye/1.jpg') # path to my test image
 
 while True:
 
