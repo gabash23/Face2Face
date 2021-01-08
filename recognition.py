@@ -11,7 +11,7 @@ def recognize():
         labels = {value: key for key, value in temp.items()}
 
     face_cascade = cv2.CascadeClassifier('cascades/frontface.xml')
-    # img = cv2.imread('images/test.PNG')  # path to my test image
+    img = cv2.imread('images/test.PNG')  # path to my test image
     recognizer = cv2.face.LBPHFaceRecognizer_create()
     recognizer.read("trainer.yml")
 
