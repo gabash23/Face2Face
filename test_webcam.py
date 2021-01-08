@@ -11,7 +11,7 @@ while True:
     frame_flip = cv2.flip(frame, 1)
     gray = cv2.cvtColor(frame_flip, cv2.COLOR_BGR2GRAY)
 
-    faces = face_cascade.detectMultiScale(gray, scaleFactor=1.5, minNeighbors=5)
+    faces = face_cascade.detectMultiScale(gray, scaleFactor=1.2, minNeighbors=5)
 
     for (x, y, w, h) in faces:
         # print(x, y, w, h)

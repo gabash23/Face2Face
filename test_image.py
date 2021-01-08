@@ -2,13 +2,13 @@ import cv2
 import numpy as np
 
 face_cascade = cv2.CascadeClassifier('cascades/frontface.xml')
-img = cv2.imread('images/Kanye/1.jpg') # path to my test image
+img = cv2.imread('images/Emilio/3.jpg') # path to my test image
 
 while True:
 
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
-    faces = face_cascade.detectMultiScale(gray, scaleFactor=1.5, minNeighbors=5)
+    faces = face_cascade.detectMultiScale(gray, scaleFactor=1.2, minNeighbors=5)
 
     for (x, y, w, h) in faces:
         # print(x, y, w, h)
