@@ -3,7 +3,7 @@ import numpy as np
 import pickle
 
 
-def recognize():
+def recognize(filePath):
     # get labels instead of indices
     with open("ids.pickle", 'rb') as file:
         temp = pickle.load(file)
@@ -11,7 +11,7 @@ def recognize():
         labels = {value: key for key, value in temp.items()}
 
     face_cascade = cv2.CascadeClassifier('cascades/frontface.xml')
-    img = cv2.imread('images/test.PNG')  # path to my test image
+    img = cv2.imread(filePath)  # path to my test image
     recognizer = cv2.face.LBPHFaceRecognizer_create()
     recognizer.read("trainer.yml")
 
@@ -30,7 +30,6 @@ def recognize():
         _id_, confidence = recognizer.predict(roi)
         if confidence <= 45:
             if not recognized:
-                print(confidence)
                 recognized_list.append(labels[_id_])
                 recognized = True
 
@@ -51,8 +50,6 @@ def recognize():
         return "Unknown"
 
     ret_str = ""
-    for i in range(len(recognized_list)):
-        if i == recognized_list[-1]:
-            ret_str += i
-        else:
-            ret_str += i, ", "
+    for element in recognized_list:
+        ret_str = element + ", "
+        return ret_str[:-2]
