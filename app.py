@@ -1,5 +1,6 @@
 from flask import Flask, Response, request, jsonify
-from werkzeug.utils import secure_filenameimport numpy as np
+from werkzeug.utils import secure_filename
+import numpy as np
 import cv2
 
 app = Flask(__name__)
