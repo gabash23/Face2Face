@@ -7,7 +7,6 @@ app = Flask(__name__)
 
 @app.route('/image', methods=['POST'])
 def image():
-    print(request.files)
     file = request.files['file']
     filename = secure_filename(file.filename)
     file.save(filename)
