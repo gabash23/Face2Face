@@ -14,9 +14,11 @@ app.config['MAX_CONTENT_LENGTH'] = 100 * 1024 * 1024
 def home():
     return rt('home.html')
 
+
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 
 @app.route('/', methods=['GET', 'POST'])
 def upload_file():
