@@ -53,3 +53,6 @@ def recognize(filePath):
     for element in recognized_list:
         ret_str = element + ", "
         return ret_str[:-2]
+
+
+print(recognize("images/test.jpg"))

@@ -3,3 +3,4 @@ venv/
 images/
 ids.pickle
 trainer.yml
+recog_test.py
