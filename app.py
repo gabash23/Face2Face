@@ -8,18 +8,19 @@ import cv2
 app = Flask(__name__)
 CORS(app)
 
+@app.route('/', methods=['GET'])
+def home():
+    return render_template("home.html")
+
 @app.route('/image', methods=['GET', 'POST'])
 def image():
-    if request.method == 'POST':
-        file = request.files['file']
-        filename = secure_filename(file.filename)
-        file.save(filename)
+    file = request.files['file']
+    filename = secure_filename(file.filename)
+    file.save(filename)
 
-        recognition_result = recognize(filename)
-        print(recognition_result)
+    recognition_result = recognize(filename)
+    print(recognition_result)
 
-        return jsonify(success = True, recognition = recognition_result)
-    elif request.method == 'GET':
-        return render_template("home.html")
+    return jsonify(success = True, recognition = recognition_result)
 
 app.run(port=5000)
