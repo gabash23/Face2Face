@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Facial Recognition 😼</title>
+</head>
+<body>
+    <h1>Facial Recognition</h1>
+    <h3>Enter an image to recognize it.</h3>
+    <input type="file"
+           id="file" name="file"
+           accept="image/png, image/jpeg, image/jpg">
+    <button id="submit">Submit</button>
+    <h3 id="result">Result: Undetected</h3>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+        document.getElementById("submit").onclick = function() {
+            const fileInput = document.getElementById("file");
+            const data = new FormData();
+            data.append('file', fileInput.files[0]);
+
+            const config = {
+                method: 'post',
+                url: 'http://127.0.0.1:5000/image',
+                data: data
+            };
+
+            axios(config)
+            .then(function (response) {
+                document.getElementById("result").innerHTML = "Result: " + response.data.recognition
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        }
+    </script>
+</body>
+</html>
