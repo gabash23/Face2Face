@@ -1,7 +1,9 @@
 from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
-from src.recognition import recognize
+# from utils.recognition import recognize
+# from utils.train import train
 from werkzeug.utils import secure_filename
+
 
 app = Flask(__name__)
 CORS(app)
@@ -16,8 +18,10 @@ def image():
     filename = secure_filename(file.filename)
     file.save(filename)
 
-    recognition_result = recognize(filename)
+    # recognition_result = recognize(filename)
+    recognition_result = ""
     print(recognition_result)
+
 
     return jsonify(success = True, recognition = recognition_result)
 

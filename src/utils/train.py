@@ -51,7 +51,7 @@ def train():
 
 
     # save ids into a pickle file
-    with open("utils/ids.pickle", 'wb') as file:
+    with open("ids.pickle", 'wb') as file:
         pickle.dump(ids, file)
 
     # train
