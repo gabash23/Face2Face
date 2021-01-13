@@ -1,6 +1,6 @@
 .DS_Store
 venv/
-images/
+src/utils/images/
 .idea/
 src/utils/ids.pickle
 src/utils/trainer.yml

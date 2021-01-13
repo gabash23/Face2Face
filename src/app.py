@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
-from src.utils.recognition import recognize
-from src.utils.train import train
+from utils.recognition import recognize
+from utils.train import train
 from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
@@ -9,7 +9,7 @@ CORS(app)
 
 @app.route('/', methods=['GET'])
 def home():
-    return render_template("./templates/home.html")
+    return render_template("home.html")
 
 @app.route('/image', methods=['GET', 'POST'])
 def image():

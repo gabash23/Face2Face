@@ -5,15 +5,15 @@ import pickle
 
 def recognize(filePath):
     # get labels instead of indices
-    with open("ids.pickle", 'rb') as file:
+    with open("src/utils/ids.pickle", 'rb') as file:
         temp = pickle.load(file)
         # it would normally be {name, index}
         labels = {value: key for key, value in temp.items()}
 
-    face_cascade = cv2.CascadeClassifier('cascades/frontface.xml')
+    face_cascade = cv2.CascadeClassifier('src/utils/cascades/frontface.xml')
     img = cv2.imread(filePath)  # path to my test image
     recognizer = cv2.face.LBPHFaceRecognizer_create()
-    recognizer.read("../trainer.yml")
+    recognizer.read("src/utils/trainer.yml")
 
     recognized = False
     recognized_list = []
