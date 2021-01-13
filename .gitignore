@@ -2,6 +2,5 @@
 venv/
 images/
 .idea/
-ids.pickle
-trainer.yml
-recog_test.py
+src/utils/ids.pickle
+src/utils/trainer.yml

@@ -1,9 +1,7 @@
-from flask import Flask, Response, request, jsonify, render_template
+from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
-from recognition import recognize
+from src.recognition import recognize
 from werkzeug.utils import secure_filename
-import numpy as np
-import cv2
 
 app = Flask(__name__)
 CORS(app)

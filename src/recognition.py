@@ -5,7 +5,7 @@ import pickle
 
 def recognize(filePath):
     # get labels instead of indices
-    with open("ids.pickle", 'rb') as file:
+    with open("utils/ids.pickle", 'rb') as file:
         temp = pickle.load(file)
         # it would normally be {name, index}
         labels = {value: key for key, value in temp.items()}
@@ -55,4 +55,4 @@ def recognize(filePath):
         return ret_str[:-2]
 
 
-print(recognize("images/test.jpg"))
+print(recognize("../images/test.jpg"))
