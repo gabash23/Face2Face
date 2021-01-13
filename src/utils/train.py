@@ -6,10 +6,10 @@ from PIL import Image
 
 
 def train():
-    face_cascade = cv2.CascadeClassifier('cascades/frontface.xml')
+    face_cascade = cv2.CascadeClassifier('src/utils/cascades/frontface.xml')
 
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-    image_dir = os.path.join(BASE_DIR, "images")
+    image_dir = os.path.join(BASE_DIR, "src/utils/images")
     recognizer = cv2.face.LBPHFaceRecognizer_create()
 
     curr_id = 0
@@ -51,9 +51,9 @@ def train():
 
 
     # save ids into a pickle file
-    with open("ids.pickle", 'wb') as file:
+    with open("src/utils/ids.pickle", 'wb') as file:
         pickle.dump(ids, file)
 
     # train
     recognizer.train(x_train, np.array(y_train))
-    recognizer.save("trainer.yml")
+    recognizer.save("src/utils/trainer.yml")
