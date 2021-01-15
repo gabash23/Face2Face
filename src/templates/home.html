@@ -12,8 +12,9 @@
            id="file" name="file"
            accept="image/png, image/jpeg, image/jpg">
     <button id="submit">Submit</button>
-    <button id="train"></button>
     <h3 id="result">Result: Undetected</h3>
+    <button id="train">Train</button>
+    <h3 id="trained"></h3>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script>
         document.getElementById("submit").onclick = function() {
@@ -34,6 +35,16 @@
             .catch(function (error) {
                 console.log(error);
             });
+        }
+        document.getElementById("train").onclick = function() {
+            const config = {
+                method: 'post',
+                url: 'http://127.0.0.1:5000/train'
+            };
+            axois(config)
+            .then(function(response) {
+                document.getElementById("trained").innerHTML = "Data has been retrained!"
+            })
         }
     </script>
 </body>
