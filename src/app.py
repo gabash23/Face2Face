@@ -20,9 +20,9 @@ def image():
     recognition_result = recognize(filename)
     print(recognition_result)
 
-@app.route('/train', methods=['GET'])
-def train():
-    train_model()
+# @app.route('/train', methods=['GET'])
+# def train():
+#     train_model()
 
     return jsonify(success = True, recognition = recognition_result)
 
