@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
 from utils.recognition import recognize
-from utils.train import train
+from utils.train import train_model
 from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
@@ -19,6 +19,10 @@ def image():
 
     recognition_result = recognize(filename)
     print(recognition_result)
+
+@app.route('/train', methods=['GET'])
+def train():
+    train_model()
 
     return jsonify(success = True, recognition = recognition_result)
 

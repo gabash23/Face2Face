@@ -5,11 +5,11 @@ import pickle
 from PIL import Image
 
 
-def train():
+def train_model():
     face_cascade = cv2.CascadeClassifier('src/utils/cascades/frontface.xml')
 
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-    image_dir = os.path.join(BASE_DIR, "src/utils/images")
+    image_dir = os.path.join(BASE_DIR, "images")
     recognizer = cv2.face.LBPHFaceRecognizer_create()
 
     curr_id = 0
