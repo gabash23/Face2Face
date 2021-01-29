@@ -1,3 +1,5 @@
+from typing import Tuple
+
 import cv2
 import numpy as np
 import pickle
@@ -15,8 +17,8 @@ def recognize(filePath):
     recognizer = cv2.face.LBPHFaceRecognizer_create()
     recognizer.read("src/utils/trainer.yml")
 
-    recognized = False
-    recognized_list = []
+    recognized: bool = False
+    recognized_list: [Tuple[str, float]] = []
 
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     faces = face_cascade.detectMultiScale(gray, scaleFactor=1.2, minNeighbors=5)
@@ -30,7 +32,7 @@ def recognize(filePath):
         _id_, confidence = recognizer.predict(roi)
         if confidence <= 45:
             if not recognized:
-                recognized_list.append(labels[_id_])
+                recognized_list.append((labels[_id_], confidence))
                 recognized = True
 
                 # color = (0, 255, 0)  # BGR
@@ -51,7 +53,7 @@ def recognize(filePath):
 
     ret_str = ""
     for element in recognized_list:
-        ret_str = element + ", "
-        return ret_str[:-2]
+        ret_str = element[0] + " "
+        return ret_str[:-2], recognized_list
 
 

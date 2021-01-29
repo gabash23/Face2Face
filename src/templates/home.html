@@ -12,9 +12,16 @@
            id="file" name="file"
            accept="image/png, image/jpeg, image/jpg">
     <button id="submit">Submit</button>
-    <h3 id="result">Result: Undetected</h3>
-    <button id="train">Train</button>
-    <h3 id="trained"></h3>
+    <h3 id="result">Result: Enter An Image</h3>
+    <br><div style="display:none" id="add_form">
+            <h3>Please enter <span id="image_count">5</span>a name and images, each individually</h3><br>
+            <input name="person_name" placeholder="name">
+            <input type="file"
+                   name="added_image"
+                   id="added_image"
+                accept="image/png, image/jpeg, image/jpg">
+            <button type="submit" id="add_pic">Submit</button>
+    </div>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script>
         document.getElementById("submit").onclick = function() {
@@ -30,21 +37,39 @@
 
             axios(config)
             .then(function (response) {
-                document.getElementById("result").innerHTML = "Result: " + response.data.recognition
+                if (response.data.recognition === "Unknown") {
+                    document.getElementById("add_form").style.display = "block";
+                    document.getElementById("add_pic").onclick = function() {
+                        let cur = parseInt(document.getElementById("image_count").innerHTML)
+
+                        if (cur === 0) {
+                            const train = {
+                                method: 'post',
+                                url: 'http://127.0.0.1:5000/train',
+                            }
+                            document.getElementById("add_form").innerHTML = "Please restart the program"
+                        }
+                        else {
+                            const input = document.getElementById("added_image");
+                            const newPic = new FormData();
+                            newPic.append('added_image', input.files[0]);
+                            document.getElementById("image_count").innerHTML = (cur - 1).toString();
+                            let name = document.getElementById("added_image").value
+                            const con = {
+                                method: 'post',
+                                url: 'http://127.0.0.1:5000/add/' + name,
+                                data: newPic
+                            }
+                        }
+                    }
+                }
+                else {
+                    document.getElementById("result").innerHTML = "Result: " + response.data.recognition
+                }
             })
             .catch(function (error) {
                 console.log(error);
             });
-        }
-        document.getElementById("train").onclick = function() {
-            const config = {
-                method: 'post',
-                url: 'http://127.0.0.1:5000/train'
-            };
-            axois(config)
-            .then(function(response) {
-                document.getElementById("trained").innerHTML = "Data has been retrained!"
-            })
         }
     </script>
 </body>
