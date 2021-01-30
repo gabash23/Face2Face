@@ -14,7 +14,7 @@
     <button id="submit">Submit</button>
     <h3 id="result">Result: Enter An Image</h3>
     <br><div style="display:none" id="add_form">
-            <h3>Please enter <span id="image_count">5</span>a name and images, each individually</h3><br>
+            <h3>Please enter a name and <span id="image_count">5</span> images, each individually</h3><br>
             <input name="person_name" placeholder="name">
             <input type="file"
                    name="added_image"
@@ -47,7 +47,13 @@
                                 method: 'post',
                                 url: 'http://127.0.0.1:5000/train',
                             }
-                            document.getElementById("add_form").innerHTML = "Please restart the program"
+                            axios(train)
+                            .then(function (response) {
+                                document.getElementById("add_form").innerHTML = "Please restart the program"
+                            })
+                            .catch(function(error) {
+                              console.log(error)
+                            })
                         }
                         else {
                             const input = document.getElementById("added_image");
@@ -60,6 +66,11 @@
                                 url: 'http://127.0.0.1:5000/add/' + name,
                                 data: newPic
                             }
+                            axios(con)
+                            .then(function(response){})
+                            .catch(function(error){
+                                console.log(error)
+                            })
                         }
                     }
                 }

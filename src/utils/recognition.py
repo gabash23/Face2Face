@@ -1,4 +1,4 @@
-from typing import Tuple
+from typing import Tuple, List
 
 import cv2
 import numpy as np
@@ -18,7 +18,7 @@ def recognize(filePath):
     recognizer.read("src/utils/trainer.yml")
 
     recognized: bool = False
-    recognized_list: [Tuple[str, float]] = []
+    recognized_list: List[str] = []
 
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     faces = face_cascade.detectMultiScale(gray, scaleFactor=1.2, minNeighbors=5)
@@ -32,28 +32,13 @@ def recognize(filePath):
         _id_, confidence = recognizer.predict(roi)
         if confidence <= 45:
             if not recognized:
-                recognized_list.append((labels[_id_], confidence))
+                recognized_list.append(labels[_id_])
                 recognized = True
-
-                # color = (0, 255, 0)  # BGR
-                # stroke = 2
-                # end_coord_x = x + w
-                # end_coord_y = y + h
-                # cv2.rectangle(img, (x, y), (end_coord_x, end_coord_y), color, stroke)
-        # else:
-        # color = (0, 0, 255)  # BGR
-        # stroke = 2
-        # end_coord_x = x + w
-        # end_coord_y = y + h
-        # cv2.rectangle(img, (x, y), (end_coord_x, end_coord_y), color, stroke)
-        # print("Unknown... ")
 
     if not len(recognized_list):
         return "Unknown"
 
     ret_str = ""
     for element in recognized_list:
-        ret_str = element[0] + " "
-        return ret_str[:-2], recognized_list
-
-
+        ret_str += element + " "
+    return ret_str

@@ -1,3 +1,5 @@
+from typing import List, Tuple
+
 import cv2
 import os
 from os import path
@@ -20,30 +22,32 @@ def home():
 def image():
     file = request.files['file']
     filename = secure_filename(file.filename)
-    # file.save(filename)
+    file.save(filename)
 
     recognition_result = recognize(filename)
-    names, recognized_list = recognition_result.split(" ")
+    names: List[str] or str
 
-    print(names)
+    names = recognition_result
 
     return jsonify(success=True, recognition=names)
 
 
-@app.route('/add/<name>', methods=['POST'])
-def add(name):
-    pic = str(name)
-    pic = pic.title
-    file = request.files['added_image']
-    save_path = "/src/utils/images"
-    os.rename(file, pic + ".png")
-    if path.exist(save_path + "/" + pic):
-        cv2.imwrite(save_path + "/" + pic + "/" + file.filename, file)
+@app.route('/add', methods=['POST'])
+def add():
+    file = request.files['file']
+    filename = secure_filename(file.filename)
+    UPLOAD_FOLDER = '/src/utils/images/' + filename
+    ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
+
+    app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+    return jsonify(success=True)
 
 
 @app.route('/train', methods=['POST'])
 def train():
     train_model()
+    return jsonify(success=True)
 
 
 app.run(port=5000)
