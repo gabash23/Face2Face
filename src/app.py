@@ -25,7 +25,7 @@ def home():
     return render_template("home.html")
 
 
-@app.route('/image', methods=['GET', 'POST'])
+@app.route('/image', methods=['POST'])
 def image() -> str:
     file = request.files['file']
     filename = secure_filename(file.filename)
@@ -35,23 +35,24 @@ def image() -> str:
     names: List[str] or str
 
     names = recognition_result
-
     return jsonify(success=True, recognition=names)
 
 
-@app.route('/add', methods=['GET', 'POST'])
+@app.route('/add', methods=['POST'])
 def add() -> None:
-    print('hello')
     file = request.files['file']
     file_name = secure_filename(file.filename)
-    ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
-    print("______________________________")
-    if legal_file(file.filename, ALLOWED_EXTENSIONS):
-        UPLOAD_FOLDER = '/src/utils/images/' + file_name
-        app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-        print(app.config['UPLOAD_FOLDER'])
-        file.save(os.path.join(app.config['UPLOAD_FOLDER'], file_name))
-
+    ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'PNG', 'JPG', 'JPEG'}
+    if legal_file(file_name, ALLOWED_EXTENSIONS):
+        name = request.args.get('name')
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        utils_dir = os.path.join(base_dir, "utils")
+        image_dir = os.path.join(utils_dir, "images")
+        final_dir = os.path.join(image_dir, name)
+        print(final_dir)
+        if not os.path.exists(final_dir):
+            os.mkdir(final_dir)
+        file.save(os.path.join(final_dir, file_name))
     else:
         flash("Please select an image")
         return jsonify(success=False)
@@ -59,7 +60,7 @@ def add() -> None:
     return jsonify(success=True)
 
 
-@app.route('/train', methods=['POST'])
+@app.route('/train', methods=['GET'])
 def train() -> None:
     train_model()
     return jsonify(success=True)

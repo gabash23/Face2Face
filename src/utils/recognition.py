@@ -24,8 +24,6 @@ def recognize(filePath):
     faces = face_cascade.detectMultiScale(gray, scaleFactor=1.2, minNeighbors=5)
 
     for (x, y, w, h) in faces:
-        # print(x, y, w, h)
-
         roi = gray[y:y + h, x:x + w]
 
         # recognizing
@@ -40,5 +38,5 @@ def recognize(filePath):
 
     ret_str = ""
     for element in recognized_list:
-        ret_str += element + " "
+        ret_str += element.replace("_", " ").title() + " "
     return ret_str

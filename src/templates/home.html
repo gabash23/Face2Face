@@ -3,6 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <title>Facial Recognition 😼</title>
+    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'>
+    <style>
+        h1 {
+            font-family: 'Roboto';
+            font-size: 36px;
+        }
+
+        h3 {
+            font-family: 'Open Sans';
+            font-size: 16px;
+        }
+    </style>
 </head>
 <body>
 <!--dd-->
@@ -13,74 +26,61 @@
            accept="image/png, image/jpeg, image/jpg">
     <button id="submit">Submit</button>
     <h3 id="result">Result: Enter An Image</h3>
-    <br><div style="display:none" id="add_form">
-            <h3>Please enter a name and <span id="image_count">5</span> images, each individually</h3><br>
-            <input name="person_name" placeholder="name">
-            <input type="file"
-                   name="added_image"
-                   id="added_image"
-                accept="image/png, image/jpeg, image/jpg">
-            <button type="submit" id="add_pic">Submit</button>
+    <br>
+    <div style="display:none" id="add_form">
+        <h3>Please enter a name and <span id="image_count">5</span> images, each individually</h3>
+        <input id="person_name" placeholder="Enter name">
+        <input type="file"
+               id="added_image" name="added_image"
+               accept="image/png, image/jpeg, image/jpg">
+        <button type="submit" id="add_pic">Submit</button>
+        <h3 id="trainResult" style="display: none">Trained!</h3>
     </div>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script>
-        document.getElementById("submit").onclick = function() {
-            const fileInput = document.getElementById("file");
-            const data = new FormData();
+        document.getElementById("submit").onclick = async () => {
+            let fileInput = document.getElementById("file");
+            let data = new FormData();
             data.append('file', fileInput.files[0]);
 
-            const config = {
-                method: 'post',
+            const recogConfig = {
+                method: 'POST',
                 url: 'http://127.0.0.1:5000/image',
-                data: data
+                data
             };
+            const recogResp = await axios(recogConfig);
 
-            axios(config)
-            .then(function (response) {
-                if (response.data.recognition === "Unknown") {
-                    document.getElementById("add_form").style.display = "block";
-                    document.getElementById("add_pic").onclick = function() {
-                        let cur = parseInt(document.getElementById("image_count").innerHTML)
+            if (recogResp.data.recognition === "Unknown") {
+                document.getElementById("result").innerHTML = "Result: Unknown"
+                document.getElementById("add_form").style.display = "block";
+                document.getElementById("add_pic").onclick = async () => {
+                    let cur = parseInt(document.getElementById("image_count").innerHTML);
 
-                        if (cur === 0) {
-                            const train = {
-                                method: 'post',
-                                url: 'http://127.0.0.1:5000/train',
-                            }
-                            axios(train)
-                            .then(function (response) {
-                                document.getElementById("add_form").innerHTML = "Please restart the program"
-                            })
-                            .catch(function(error) {
-                              console.log(error)
-                            })
+                    if (cur === 0) {
+                        const trainConfig = {
+                            method: 'GET',
+                            url: 'http://127.0.0.1:5000/train',
                         }
-                        else {
-                            const input = document.getElementById("added_image");
-                            const newPic = new FormData();
-                            newPic.append('added_image', input.files[0]);
-                            // let name = document.getElementById("added_image").value
-                            const con = {
-                                method: 'post',
-                                url: 'http://127.0.0.1:5000/add/',
-                                data: newPic
-                            }
-                            axios(con)
-                            .then(function(response){document.getElementById("image_count").innerHTML = (cur - 1).toString();})
-                            .catch(function(error){
-                                console.log(error)
-                            })
+                        const trainResp = await axios(trainConfig);
+                        document.getElementById("trainResult").style.display = "block";
+                    } else {
+                        let fileInput = document.getElementById("added_image");
+                        let data = new FormData();
+                        data.append('file', fileInput.files[0]);
+
+                        const addConfig = {
+                            method: 'POST',
+                            url: `http://127.0.0.1:5000/add?name=${document.getElementById("person_name").value.replace(" ", "_").toLowerCase()}`,
+                            data
                         }
+                        const addResp = await axios(addConfig);
+                        document.getElementById("image_count").innerHTML = (cur - 1).toString();
                     }
                 }
-                else {
-                    document.getElementById("result").innerHTML = "Result: " + response.data.recognition
-                }
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
-        }
+            } else {
+                document.getElementById("result").innerHTML = "Result: " + recogResp.data.recognition;
+            }
+        };
     </script>
 </body>
 </html>
