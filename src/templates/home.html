@@ -59,15 +59,14 @@
                             const input = document.getElementById("added_image");
                             const newPic = new FormData();
                             newPic.append('added_image', input.files[0]);
-                            document.getElementById("image_count").innerHTML = (cur - 1).toString();
-                            let name = document.getElementById("added_image").value
+                            // let name = document.getElementById("added_image").value
                             const con = {
                                 method: 'post',
-                                url: 'http://127.0.0.1:5000/add/' + name,
+                                url: 'http://127.0.0.1:5000/add/',
                                 data: newPic
                             }
                             axios(con)
-                            .then(function(response){})
+                            .then(function(response){document.getElementById("image_count").innerHTML = (cur - 1).toString();})
                             .catch(function(error){
                                 console.log(error)
                             })
