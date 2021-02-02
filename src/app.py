@@ -31,10 +31,22 @@ def image() -> str:
     filename = secure_filename(file.filename)
     file.save(filename)
 
-    recognition_result = recognize(filename)
-    names: List[str] or str
+    conf: int = -1
+    names: str = ""
 
-    names = recognition_result
+    recognition_result = recognize(filename)
+
+    if recognition_result != "Unknown":
+        conf = recognition_result[1]
+        names = recognition_result[0]
+
+    else:
+        names = recognition_result
+
+    img_dir = os.path.join("src/utils/images/", names.replace(" ", "_"))
+    if conf != 0 and names != "Unknown":
+        file.save(os.path.join(img_dir, file.filename))
+
     os.remove(file.filename)
     return jsonify(success=True, recognition=names)
 

@@ -1,11 +1,12 @@
-from typing import Tuple, List
+from typing import Tuple, List, Union
 
 import cv2
 import numpy as np
 import os
 import pickle
 
-def recognize(filePath):
+
+def recognize(filePath) -> Union[str, Tuple[str, int]]:
     # get labels instead of indices
     with open("src/utils/ids.pickle", 'rb') as file:
         temp = pickle.load(file)
@@ -18,7 +19,8 @@ def recognize(filePath):
     recognizer.read("src/utils/trainer.yml")
 
     recognized: bool = False
-    recognized_list: List[str] = []
+    ret_str: str = " "
+    conf: int = -1
 
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     faces = face_cascade.detectMultiScale(gray, scaleFactor=1.2, minNeighbors=5)
@@ -36,15 +38,16 @@ def recognize(filePath):
             end_coord_y = y + h
 
             if not recognized:
-                recognized_list.append(labels[_id_])
+                ret_str = labels[_id_]
+                conf = confidence
                 recognized = True
                 path = 'src/static'
-                cv2.imwrite(os.path.join(path, labels[_id_].title() + ".png"), cv2.rectangle(img, (x, y), (end_coord_x, end_coord_y), color, stroke))
+                cv2.imwrite(os.path.join(path, labels[_id_].title() + ".png"),
+                            cv2.rectangle(img, (x, y), (end_coord_x, end_coord_y), color, stroke))
 
-    if not len(recognized_list):
+    if ret_str == " ":
         return "Unknown"
 
-    ret_str = ""
-    for element in recognized_list:
-        ret_str += element.replace("_", " ").title() + " "
-    return ret_str
+    ret_str = ret_str.replace("_", " ").title()
+
+    return ret_str, conf
