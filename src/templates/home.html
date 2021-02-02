@@ -26,7 +26,8 @@
            accept="image/png, image/jpeg, image/jpg">
     <button id="submit">Submit</button>
     <h3 id="result">Result: Enter An Image</h3>
-    <br>
+    <img id="result_img" src="">
+<!--    <br>-->
     <div style="display:none" id="add_form">
         <h3>Please enter a name and <span id="image_count">5</span> images, each individually</h3>
         <input id="person_name" placeholder="Enter name">
@@ -79,6 +80,7 @@
                 }
             } else {
                 document.getElementById("result").innerHTML = "Result: " + recogResp.data.recognition;
+                document.getElementById("result_img").setAttribute("src","Da_Baby.png")
             }
         };
     </script>

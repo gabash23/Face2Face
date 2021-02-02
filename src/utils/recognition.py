@@ -2,8 +2,8 @@ from typing import Tuple, List
 
 import cv2
 import numpy as np
+import os
 import pickle
-
 
 def recognize(filePath):
     # get labels instead of indices
@@ -25,13 +25,21 @@ def recognize(filePath):
 
     for (x, y, w, h) in faces:
         roi = gray[y:y + h, x:x + w]
+        color_roi = img[y:y + h, x:x + w]
 
         # recognizing
         _id_, confidence = recognizer.predict(roi)
         if confidence <= 45:
+            color = (0, 0, 255)  # BGR
+            stroke = 8
+            end_coord_x = x + w
+            end_coord_y = y + h
+
             if not recognized:
                 recognized_list.append(labels[_id_])
                 recognized = True
+                path = 'src/static'
+                cv2.imwrite(os.path.join(path, labels[_id_].title() + ".png"), cv2.rectangle(img, (x, y), (end_coord_x, end_coord_y), color, stroke))
 
     if not len(recognized_list):
         return "Unknown"

@@ -35,6 +35,7 @@ def image() -> str:
     names: List[str] or str
 
     names = recognition_result
+    os.remove(file.filename)
     return jsonify(success=True, recognition=names)
 
 
