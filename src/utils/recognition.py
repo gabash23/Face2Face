@@ -42,7 +42,9 @@ def recognize(filePath) -> Union[str, Tuple[str, int]]:
                 conf = confidence
                 recognized = True
                 path = 'src/static'
-                cv2.imwrite(os.path.join(path, labels[_id_].title() + ".png"),
+                image_name = labels[_id_].title() + ".png"
+                print(image_name)
+                cv2.imwrite(os.path.join(path, image_name),
                             cv2.rectangle(img, (x, y), (end_coord_x, end_coord_y), color, stroke))
 
     if ret_str == " ":
@@ -50,4 +52,4 @@ def recognize(filePath) -> Union[str, Tuple[str, int]]:
 
     ret_str = ret_str.replace("_", " ").title()
 
-    return ret_str, conf
+    return ret_str, conf, image_name

@@ -6,6 +6,10 @@
     <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
     <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet'>
     <style>
+        body {
+            background-color: #F7C374;
+        }
+
         h1 {
             font-family: 'Roboto';
             font-size: 36px;
@@ -15,29 +19,64 @@
             font-family: 'Open Sans';
             font-size: 16px;
         }
+
+        .center {
+          text-align: center;
+        }
+
+        .btn {
+            background-color: #FB9178;
+            width: 180px;
+            font-family: 'Open Sans';
+            font-size: 12px;
+            border-color: #FB9178;
+            border-style: solid;
+            transition-duration: 0.5s;
+        }
+
+        .btn:hover {
+            background-color: white;
+            border-color: #FB9178;
+            border-style: solid;
+        }
+
+        input[type=file] {
+            width: 180px;
+        }
+
+        input {
+            width: 172px;
+        }
     </style>
 </head>
 <body>
 <!--dd-->
-    <h1>Facial Recognition</h1>
-    <h3>Enter an image to recognize it.</h3>
-    <input type="file"
-           id="file" name="file"
-           accept="image/png, image/jpeg, image/jpg">
-    <button id="submit">Submit</button>
-    <h3 id="result">Result: Enter An Image</h3>
-<!--    <img id="result_img" src="">-->
-<!--    <br>-->
-    <div style="display:none" id="add_form">
-        <h3>Please enter a name and <span id="image_count">5</span> images, each individually</h3>
-        <input id="person_name" placeholder="Enter name">
+    <div class="grad center">
+        <h1>Facial Recognition</h1>
+        <h3>Enter an image to recognize it.</h3>
         <input type="file"
-               id="added_image" name="added_image"
+               id="file" name="file"
                accept="image/png, image/jpeg, image/jpg">
-        <button type="submit" id="add_pic">Submit</button>
-        <h3 id="trainResult" style="display: none">Trained!</h3>
+        <br>
+        <br>
+        <button id="submit" class="btn">Submit</button>
+        <h3 id="result">Result: Enter An Image</h3>
+        <img id="result_image" class="resultImg" src="https://media.discordapp.net/attachments/623657874547015700/806261189226659840/f2f.png?width=300&height=300">
+        <br>
+        <div style="display:none" id="add_form">
+            <h3>Please enter a name and <span id="image_count">5</span> images, each individually</h3>
+            <input id="person_name" placeholder="Enter name">
+            <br>
+            <input type="file"
+                   id="added_image" name="added_image"
+                   accept="image/png, image/jpeg, image/jpg">
+            <br>
+            <br>
+            <button type="submit" id="add_pic" class="btn">Submit</button>
+            <h3 id="trainResult" style="display: none">Training...</h3>
+        </div>
     </div>
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script>
         document.getElementById("submit").onclick = async () => {
             let fileInput = document.getElementById("file");
@@ -63,7 +102,7 @@
                             url: 'http://127.0.0.1:5000/train',
                         }
                         const trainResp = await axios(trainConfig);
-                        document.getElementById("trainResult").style.display = "block";
+                        document.getElementById("trainResult").innerHTML = "Trained!";
                     } else {
                         let fileInput = document.getElementById("added_image");
                         let data = new FormData();
@@ -76,11 +115,14 @@
                         }
                         const addResp = await axios(addConfig);
                         document.getElementById("image_count").innerHTML = (cur - 1).toString();
+                        if (cur === 0) {
+                            document.getElementById("trainResult").style.display = "block";
+                        }
                     }
                 }
             } else {
                 document.getElementById("result").innerHTML = "Result: " + recogResp.data.recognition;
-                // document.getElementById("result_img").setAttribute("src","pic.png")
+                document.getElementById("result_image").src = `/static/${recogResp.data.image_name}`;
             }
         };
     </script>

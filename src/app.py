@@ -39,16 +39,18 @@ def image() -> str:
     if recognition_result != "Unknown":
         conf = recognition_result[1]
         names = recognition_result[0]
+        image_name = recognition_result[2]
 
     else:
         names = recognition_result
+        image_name = None
 
     img_dir = os.path.join("src/utils/images/", names.replace(" ", "_"))
     if conf != 0 and names != "Unknown":
         file.save(os.path.join(img_dir, file.filename))
 
     os.remove(file.filename)
-    return jsonify(success=True, recognition=names)
+    return jsonify(success=True, recognition=names, image_name=image_name)
 
 
 @app.route('/add', methods=['POST'])
@@ -79,4 +81,4 @@ def train() -> None:
     return jsonify(success=True)
 
 
-app.run(port=5000)
+app.run(port=5000, debug=True)
