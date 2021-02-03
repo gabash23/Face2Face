@@ -47,6 +47,12 @@
         input {
             width: 172px;
         }
+
+        .resultImg {
+            object-fit: contain;
+            width: 100%;
+            height: 350px;
+        }
     </style>
 </head>
 <body>
@@ -61,7 +67,7 @@
         <br>
         <button id="submit" class="btn">Submit</button>
         <h3 id="result">Result: Enter An Image</h3>
-        <img id="result_image" style="" class="resultImg" src="https://media.discordapp.net/attachments/623657874547015700/806261189226659840/f2f.png?width=300&height=300">
+        <img id="result_image" class="resultImg" src="https://media.discordapp.net/attachments/623657874547015700/806261189226659840/f2f.png?width=300&height=300">
         <br>
         <div style="display:none" id="add_form">
             <h3>Please enter a name and <span id="image_count">5</span> images, each individually</h3>

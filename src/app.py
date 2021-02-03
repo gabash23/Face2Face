@@ -2,7 +2,6 @@ from typing import List, Tuple
 
 import cv2
 import os
-import requests
 from os import path
 from flask import Flask, flash, request, jsonify, render_template
 from flask_cors import CORS
@@ -41,7 +40,6 @@ def image() -> str:
         conf = recognition_result[1]
         names = recognition_result[0]
         image_name = recognition_result[2]
-        r = requests.get("http://127.0.0.1:5000/static/" + image_name)
 
     else:
         names = recognition_result
