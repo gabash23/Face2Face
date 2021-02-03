@@ -61,7 +61,7 @@
         <br>
         <button id="submit" class="btn">Submit</button>
         <h3 id="result">Result: Enter An Image</h3>
-        <img id="result_image" class="resultImg" src="https://media.discordapp.net/attachments/623657874547015700/806261189226659840/f2f.png?width=300&height=300">
+        <img id="result_image" style="" class="resultImg" src="https://media.discordapp.net/attachments/623657874547015700/806261189226659840/f2f.png?width=300&height=300">
         <br>
         <div style="display:none" id="add_form">
             <h3>Please enter a name and <span id="image_count">5</span> images, each individually</h3>
@@ -96,31 +96,44 @@
                 document.getElementById("add_pic").onclick = async () => {
                     let cur = parseInt(document.getElementById("image_count").innerHTML);
 
-                    if (cur === 0) {
+                    let fileInput = document.getElementById("added_image");
+                    let data = new FormData();
+                    data.append('file', fileInput.files[0]);
+
+                    const addConfig = {
+                        method: 'POST',
+                        url: `http://127.0.0.1:5000/add?name=${document.getElementById("person_name").value.replace(" ", "_").toLowerCase()}`,
+                        data
+                    }
+                    const addResp = await axios(addConfig);
+                    document.getElementById("image_count").innerHTML = (cur - 1).toString();
+                    if (cur === 1) {
+                        document.getElementById("trainResult").style.display = "block";
                         const trainConfig = {
                             method: 'GET',
                             url: 'http://127.0.0.1:5000/train',
                         }
                         const trainResp = await axios(trainConfig);
                         document.getElementById("trainResult").innerHTML = "Trained!";
-                    } else {
-                        let fileInput = document.getElementById("added_image");
-                        let data = new FormData();
-                        data.append('file', fileInput.files[0]);
-
-                        const addConfig = {
-                            method: 'POST',
-                            url: `http://127.0.0.1:5000/add?name=${document.getElementById("person_name").value.replace(" ", "_").toLowerCase()}`,
-                            data
-                        }
-                        const addResp = await axios(addConfig);
-                        document.getElementById("image_count").innerHTML = (cur - 1).toString();
-                        if (cur === 0) {
-                            document.getElementById("trainResult").style.display = "block";
-                        }
                     }
                 }
             } else {
+                fetch(`http://127.0.0.1:5000/static/${recogResp.data.image_name}`, {
+                    headers: {
+                        'Connection': 'keep-alive',
+                        'Cache-Control': 'max-age=0',
+                        'Upgrade-Insecure-Requests': '1',
+                        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.104 Safari/537.36',
+                        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+                        'Sec-Fetch-Site': 'none',
+                        'Sec-Fetch-Mode': 'navigate',
+                        'Sec-Fetch-User': '?1',
+                        'Sec-Fetch-Dest': 'document',
+                        'Accept-Language': 'en-US,en;q=0.9,he;q=0.8,es;q=0.7',
+                        'dnt': '1',
+                        'If-Modified-Since': 'Wed, 03 Feb 2021 03:38:05 GMT'
+                    }
+                });
                 document.getElementById("result").innerHTML = "Result: " + recogResp.data.recognition;
                 document.getElementById("result_image").src = `/static/${recogResp.data.image_name}`;
             }
